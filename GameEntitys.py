@@ -8,6 +8,7 @@ from pygame.locals import *
 from gameobjects.vector2 import Vector2
 from random import randint
 from EntityState import *
+import GameRun
 
 class GameEntity():
 	#游戏的实体单位，其中共有的基本属性和功能
@@ -39,10 +40,10 @@ class GameEntity():
 			
 class Ant(GameEntity):
 	#蚂蚁
-	def __init__(self,"ant"):
+	def __init__(self, world, image):
 		GameEntity.__init__(self, world, "ant", image)
-		exploring_state = AntstateExploring(self)
-		seeking_state = AntstateSeeking(self)
+		exploring_state = AntStateExploring(self)
+		seeking_state = AntStateSeeking(self)
 		delivering_state = AntStateDelivering(self)
 		hunting_state = AntStateHunting(self)
 		self.brain.add_state(exploring_state)
@@ -80,11 +81,11 @@ class Spider(GameEntity):
 	#蜘蛛
 	def __init__(self, world, image):
 		GameEntity.__init__(self, world, "Spider", image)
-		self.dead_image = pygame.transfom.flip(image, 0, 1)
+		self.dead_image = pygame.transform.flip(image, 0, 1)
 		self.health = 25
 		self.speed = 50. + randint(-20,20)
 		
-	def bitten(self)
+	def bitten(self):
 	#被蚂蚁hunting时
 		self.health -= 1
 		if self.health <= 0:
@@ -95,7 +96,15 @@ class Spider(GameEntity):
 	def render(self, surface):
 		GameEntity.render(self, surface)
 		x, y = self.location
-		if x > SCREEN_SIZE[0] + 2 :
+		w, h = self.image.get_size()
+		bar_x = x - 12
+		bar_y = y + h/2
+		surface.fill( (255, 0, 0), (bar_x, bar_y, 25, 4))
+		surface.fill( (0, 255, 0), (bar_x, bar_y, self.health, 4))
+
+	def process(self, time_passed):
+		x, y = self.location
+		if x > SCREEN_SIZE[0] + 2:
 			self.world.remove_entity(self)
 			return
 		GameEntity.process(self, time_passed)

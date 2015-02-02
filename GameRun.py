@@ -9,7 +9,7 @@ NEST_SIZE = 100
 
 import pygame
 from pygame.locals import *
-from GameEntity import *
+from GameEntitys import *
 from EntityState import *
 from gameobjects.vector2 import Vector2
 
@@ -37,7 +37,12 @@ def run():
 		
 		if randint(1, 10) == 1:
 			leaf = Leaf(world, leaf_image)
-			spider.locatin = Vector2(-50, randint(0, h))
+			leaf.location = Vector2(randint(0, w), randint(0, h))
+			world.add_entity(leaf)
+
+		if randint(1, 100) == 1:
+			spider = Spider(world, spider_image)
+			spider.location = Vector2(-50, randint(0, h))
 			spider.destination = Vector2(w+50, randint(0, h))
 			world.add_entity(spider)
 			
@@ -46,6 +51,6 @@ def run():
 	
 	pygame.display.update()
 	
-if __name__ == "__main__"
+if __name__ == "__main__":
 	run()
 			
