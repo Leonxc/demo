@@ -18,7 +18,7 @@ class GameEntity():
 		self.location = Vector2(0, 0)
 		self.destination = Vector2(0, 0)
 		self.brain = StateMachine()
-		self.eye = World
+		self.world = World
 		self.id = 0
 		
 	def render(self, surface):
