@@ -33,6 +33,7 @@ class Ant():
 	def create(self):
 		x, y = self.world.mouse_pos
 		if self.world.nest.location
+		#TODO
 	
 	def attack_spider(self, spider):
 		self.destination = spider.location - randint(-10, 10)
@@ -107,4 +108,5 @@ class Spider():
 			distance = location_to_destination.get_length()
 			head = location_to_destination.normalize()
 			self.location = min(distance, time_passed * self.speed * head)
-
+	
+	def #TODO
