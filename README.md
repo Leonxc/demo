@@ -1,3 +1,4 @@
 # demo
-some ideas of mine
-个人练习所用，出处http://eyehere.net/，如有版权相关问题，请联系llxxcc000@sina.com
+
+some ideas of mine 锟斤拷锟斤拷锟斤拷习锟斤拷锟矫ｏ拷锟斤拷锟斤拷http://eyehere.net/锟斤拷锟斤拷锟叫帮拷权锟斤拷锟斤拷锟斤拷锟解，锟斤拷锟斤拷系llxxcc000@sina.com
+
