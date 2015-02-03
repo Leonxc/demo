@@ -29,11 +29,6 @@ class Ant():
 			distance = location_to_destination.get_length()
 			head = location_to_destination.normalize()
 			self.location = min(distance, time_passed * self.speed * head)
-		
-	def create(self):
-		x, y = self.world.mouse_pos
-		if self.world.nest.location
-		#TODO
 	
 	def attack_spider(self, spider):
 		self.destination = spider.location - randint(-10, 10)
@@ -44,9 +39,9 @@ class Ant():
 			self.speed = 100
 			
 	def carry_stuff(self):
-		self.destination = world.NestPosition
+		self.destination = world.nest_location
 		distance = (self.location - self.destination).get_length()
-		if distance < self.world.nest.r:
+		if distance < self.world.nest_r:
 			self.speed = 40.
 			
 	def drop_stuff(self):
@@ -64,7 +59,7 @@ class Leaf():
 	def create(self):
 		x, y = self.location
 		w, h = (self.world.width, self.world.high)
-		ox, oy = self.world.nest.loaction
+		ox, oy = self.world.nest_location
 		r = self.world.nest.r
 		for ox-r < x < ox+r and oy-r < y < oy+r:
 			x, y = (randint(0, w), randint(0, y))
@@ -95,7 +90,7 @@ class Spider():
 		self.speed = 40
 		#self.brain
 		self.location = Vector2(0, 0)
-		self.destination = Vector2(0, 0)
+		self.destination = world.nest_location
 		
 	def render(self):
 		x, y = self.location
@@ -109,4 +104,21 @@ class Spider():
 			head = location_to_destination.normalize()
 			self.location = min(distance, time_passed * self.speed * head)
 	
-	def #TODO
+	def create(self):
+		if self.world.spider_num < 0:
+			return
+		w, h = (self.world.width, self.world.high)
+		if randint(0, 100) == 1:
+			self.location = (0, randint(0, h))
+		elif randint(0, 100) == 2:
+			self.location = (w, randint(0, h))
+		elif randint(0, 100) == 3:
+			self.location = (randint(0, w), 0)
+		elif randint(0, 100) == 4:
+			self.location = (randint(0, w), h)
+			
+	def dead(self):
+		self.speed = 0
+		
+	def carry_by_ant(self, ant):
+		self.location = ant.location
