@@ -29,6 +29,7 @@ class Ant():
 			distance = location_to_destination.get_length()
 			head = location_to_destination.normalize()
 			self.location = min(distance, time_passed * self.speed * head)
+			#TODO 图片旋转
 	
 	def attack_spider(self, spider):
 		self.destination = spider.location - randint(-10, 10)
@@ -119,6 +120,7 @@ class Spider():
 			
 	def dead(self):
 		self.speed = 0
+		#TODO 图片旋转
 		
 	def carry_by_ant(self, ant):
 		self.location = ant.location

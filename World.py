@@ -27,7 +27,8 @@ class World():
 		self.leaf_image = ''
 		
 	def render(self):
-		#TODO
+		for entity in entities:
+			entity.render()
 		
 	def create_ant(self)
 		for event in pygame.event.get():
@@ -46,6 +47,8 @@ class World():
 			x, y = (randint(0, self.width), randint(0, self.high))
 			if self.nest_loaction[0]-self.nest_r < x < self.nest_loaction[0]+self.nest_r and self.nest_loaction[1]-self.nest_r < y < self.nest_loaction[1]+self.nest_r:
 				continue
+			elif:	self.leaf_num < 0:
+				continue
 			else:
 				leaf = Leaf(self.leaf_id, self.leaf_image, self)
 				self.entities[self.entities_id] = leaf
@@ -55,13 +58,30 @@ class World():
 				self.render()
 				
 	def create_spider(self):
+		if self.spider_num < 0:
+			return
+		w, h = (self.width, self.high)
+		if randint(0, 100) == 1:
+			self.location = (0, randint(0, h))
+		elif randint(0, 100) == 2:
+			self.location = (w, randint(0, h))
+		elif randint(0, 100) == 3:
+			self.location = (randint(0, w), 0)
+		elif randint(0, 100) == 4:
+			self.location = (randint(0, w), h)
+		else:
+			return
+		spider = Spider()
 		#TODO
 		
 	def del_ant(self):
 		#TODO
+		pass
 		
 	def del_leaf(self):
 		#TODO
+		pass
 		
 	def del_spider(self):
 		#TODO
+		pass
