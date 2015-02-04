@@ -18,10 +18,10 @@ class Ant():
 		self.senseRange = 30
 		self.brain = StateMachine()
 		
-	def render(self):
+	def render(self, surface):
 		x, y = self.location
 		w, h = self.image.get_size()
-		pygame.blit(self.image, (x-w/2, y-h/2))#将图片中心作为显示坐标
+		surface.blit(self.image, (x-w/2, y-h/2))#将图片中心作为显示坐标
 		
 	def process(self, time_passed):#移动
 		if self.location != self.destination:
@@ -38,6 +38,16 @@ class Ant():
 			self.speed = 60
 		else:
 			self.speed = 100
+			
+	def explore(self):
+		w, h = (self.world.width, self.world.high)
+		self.destination = (randint(0, w), randint(0, h))
+		for entity in self.world.entities:
+			if isinstance(entity, Leaf):
+				self.seeking()
+			
+	def seeking(self):
+		
 			
 	def carry_stuff(self):
 		self.destination = world.nest_location
@@ -66,10 +76,10 @@ class Leaf():
 			x, y = (randint(0, w), randint(0, y))
 		self.location = (x, y)
 			
-	def render(self):
+	def render(self, surface):
 		x, y = self.location
 		w, h = self.image.get_size()
-		pygame.blit(self.image, (x-w/2, y-h/2))
+		surface.blit(self.image, (x-w/2, y-h/2))
 		
 	def process(self, time_passed):#移动
 		if self.location != self.destination:
@@ -80,7 +90,7 @@ class Leaf():
 		
 	def carry_by_ant(self, ant):
 		self.location = ant.location
-		
+		"""
 class Spider():
 	def __init__(self, id, image, world):
 		self.name = "spider"
@@ -93,10 +103,10 @@ class Spider():
 		self.location = Vector2(0, 0)
 		self.destination = world.nest_location
 		
-	def render(self):
+	def render(self, surface):
 		x, y = self.location
 		w, h = self.image.get_size()
-		pygame.blit(self.image, (x-w/2, y-h/2))
+		surface.blit(self.image, (x-w/2, y-h/2))
 		
 	def process(self, time_passed):#移动
 		if self.location != self.destination:
@@ -124,3 +134,4 @@ class Spider():
 		
 	def carry_by_ant(self, ant):
 		self.location = ant.location
+		"""
