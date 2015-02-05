@@ -30,7 +30,7 @@ class Ant():
 			head = location_to_destination.normalize()
 			self.location = min(distance, time_passed * self.speed * head)
 			#TODO 图片旋转
-	
+	"""
 	def attack_spider(self, spider):
 		self.destination = spider.location - randint(-10, 10)
 		distance = (self.location - self.destination).get_length()
@@ -38,18 +38,27 @@ class Ant():
 			self.speed = 60
 		else:
 			self.speed = 100
-			
+			"""
 	def explore(self):
 		w, h = (self.world.width, self.world.high)
-		self.destination = (randint(0, w), randint(0, h))
-		for entity in self.world.entities:
-			if isinstance(entity, Leaf):
-				self.seeking()
+		if randint(1, 20) = 1:
+			self.destination = (randint(0, w), randint(0, h))
+			return True
+		else:
+			return False
 			
 	def seeking(self):
-		
+		for entity in self.world.entities:
+			if isinstance(entity, Leaf):
+				distance = (entity.location - self.location).get_length()
+				if 10 < distance and distance <= self.senseRange:
+					self.destination = entity.location
+					return True
+				else:
+					return False
 			
 	def carry_stuff(self):
+		if 
 		self.destination = world.nest_location
 		distance = (self.location - self.destination).get_length()
 		if distance < self.world.nest_r:

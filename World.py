@@ -30,17 +30,16 @@ class World():
 		for entity in entities:
 			entity.render(surface)
 		
-	def create_ant(self)
-		for event in pygame.event.get():
-			if event.type == MOUSEBUTTONDOWN:
-				x, y = pygame.event.MOUSEBUTTONDOWN[0]
-				if self.ant_num > 0 and x in range(0, self.width) and y in range(0, self.high)
-					ant = Ant(self.ant_id, self.ant_image, self, (x, y))
-					self.entities[self.entities_id] = ant
-					self.entities_id += 1
-					self.ant_num -= 1
-					self.ant_id += 1
-					
+	def create_ant(self, mouse_down_pos):
+		if event.type == MOUSEBUTTONDOWN:
+			x, y = mouse_down_pos
+			if self.ant_num > 0 and x in range(0, self.width) and y in range(0, self.high)
+				ant = Ant(self.ant_id, self.ant_image, self, (x, y))
+				self.entities[self.entities_id] = ant
+				self.entities_id += 1
+				self.ant_num -= 1
+				self.ant_id += 1
+				
 	def create_leaf(self):
 		while True:
 			x, y = (randint(0, self.width), randint(0, self.high))
