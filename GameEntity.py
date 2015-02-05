@@ -41,7 +41,7 @@ class Ant():
 			"""
 	def explore(self):
 		w, h = (self.world.width, self.world.high)
-		if randint(1, 20) = 1:
+		if randint(1, 20) == 1:
 			self.destination = (randint(0, w), randint(0, h))
 			return True
 		else:
@@ -54,18 +54,21 @@ class Ant():
 				if 10 < distance and distance <= self.senseRange:
 					self.destination = entity.location
 					return True
-				else:
+				elif distance < 10:
+					self.carry_stuff()
 					return False
 			
 	def carry_stuff(self):
-		if 
 		self.destination = world.nest_location
 		distance = (self.location - self.destination).get_length()
-		if distance < self.world.nest_r:
+		if distance > self.world.nest_r:
 			self.speed = 40.
+		else:
+			self.drop_stuff()
 			
 	def drop_stuff(self):
 		self.speed = 60
+		
 		
 class Leaf():
 	def __init__(self, id, image, world):
@@ -75,17 +78,23 @@ class Leaf():
 		self.world = world
 		self.location = Vector2(0, 0)
 		self.destination = Vector2(0, 0)
+		self.speed = 0
 		
 	def create(self):
-		x, y = self.location
 		w, h = (self.world.width, self.world.high)
+		x, y = (randint(0, w), randint(0, h))
 		ox, oy = self.world.nest_location
-		r = self.world.nest.r
-		for ox-r < x < ox+r and oy-r < y < oy+r:
-			x, y = (randint(0, w), randint(0, y))
-		self.location = (x, y)
-			
+		r = self.world.nest_r
+		while True:
+			if ox-r < x < ox+r and oy-r < y < oy+r:
+				x, y = (randint(0, w), randint(0, y))
+			else:
+				self.location = (x, y)
+				print x,y
+				break
+				
 	def render(self, surface):
+		print self.location
 		x, y = self.location
 		w, h = self.image.get_size()
 		surface.blit(self.image, (x-w/2, y-h/2))
@@ -95,9 +104,11 @@ class Leaf():
 			location_to_destination = self.destination - self.location
 			distance = location_to_destination.get_length()
 			head = location_to_destination.normalize()
-			self.location = min(distance, time_passed * self.speed * head)
+			road = min(distance, time_passed * self.speed)
+			self.location += self.location * head
 		
 	def carry_by_ant(self, ant):
+		self.speed = ant.speed
 		self.location = ant.location
 		"""
 class Spider():

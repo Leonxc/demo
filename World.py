@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # filename:World.py
 
@@ -9,51 +9,53 @@ class World():
 	def __init__(self):
 		self.width = 640
 		self.high = 480
-		self.nest_loaction = (self.width/2, self.high/2)
+		self.nest_location = (self.width/2, self.high/2)
 		self.nest_r = 50
-		self.entities = {}
+		self.entities = []
 		self.entities_id = 0
 		
 		self.ant_num = 20
 		self.ant_id = 0
-		self.ant_image = './source/ant.png'
-		
+		self.ant_image = 'ant.png'
+		"""
 		self.spider_num = 5
 		self.spider_id = 0
 		self.spider_image = './source/spider.png'
-		
+		"""
 		self.leaf_num = 50
 		self.leaf_id = 0
-		self.leaf_image = './source/leaf.png'
+		self.leaf_image = 'leaf.png'
+		
+		self.background = pygame.surface.Surface((self.width, self.high)).convert()
+		self.background.fill((255, 255, 255))
+		pygame.draw.circle(self.background, (200, 255, 200), self.nest_location, int(self.nest_r))
 		
 	def render(self, surface):
-		for entity in entities:
+		for entity in self.entities:
 			entity.render(surface)
+			
+	def process(self, surface):
+		for entity in self.entities:
+			entity.process(surface)
 		
 	def create_ant(self, mouse_down_pos):
 		if event.type == MOUSEBUTTONDOWN:
 			x, y = mouse_down_pos
-			if self.ant_num > 0 and x in range(0, self.width) and y in range(0, self.high)
-				ant = Ant(self.ant_id, self.ant_image, self, (x, y))
-				self.entities[self.entities_id] = ant
+			if self.ant_num > 0 and x in xrange(0, self.width) and y in xrange(0, self.high):
+				ant = Ant(self.ant_id, pygame.image.load(self.ant_image).convert_alpha(), self, (x, y))
+				self.entities.append(ant)
 				self.entities_id += 1
 				self.ant_num -= 1
 				self.ant_id += 1
 				
 	def create_leaf(self):
-		while True:
-			x, y = (randint(0, self.width), randint(0, self.high))
-			if self.nest_loaction[0]-self.nest_r < x < self.nest_loaction[0]+self.nest_r and self.nest_loaction[1]-self.nest_r < y < self.nest_loaction[1]+self.nest_r:
-				continue
-			elif:	self.leaf_num < 0:
-				continue
-			else:
-				leaf = Leaf(self.leaf_id, self.leaf_image, self)
-				self.entities[self.entities_id] = leaf
-				self.entities_id += 1
-				self.leaf_num -= 1
-				self.leaf_id += 1
-				"""
+		leaf = Leaf(self.leaf_id, pygame.image.load(self.leaf_image).convert_alpha(), self)
+		leaf.create()
+		self.entities.append(leaf)
+		self.entities_id += 1
+		self.leaf_num -= 1
+		self.leaf_id += 1
+"""
 	def create_spider(self):
 		if self.spider_num < 0:
 			return
