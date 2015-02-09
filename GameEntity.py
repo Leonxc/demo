@@ -49,6 +49,7 @@ class Ant():
 	def seeking(self, leaf):
 		self.destination = leaf.location
 		self.state = "seeking"
+		
 	def carry_stuff(self, leaf):
 		self.destination = self.world.nest_location
 		self.speed = 40

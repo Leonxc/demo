@@ -33,16 +33,21 @@ def run():
 				for leaf in world.entities:
 					if isinstance(leaf, Leaf):
 						distance = (ant.location - leaf.location).get_length()
+						distance_to_nest = (ant.location - world.nest_location).get_length()
 						if distance > ant.senseRange and (ant.state == "explore" or ant.state == "drop_stuff"):
 							ant.explore()
+							print 1
 						elif 10 < distance < ant.senseRange and (ant.state == "explore" or ant.state == "seeking") :
 							ant.seeking(leaf)
-						elif distance < 10 and ant.state == "seeking":
+							print 2
+						elif distance_to_nest >world.nest_r and distance < 10 and ant.state == "seeking":
 							ant.carry_stuff(leaf)
 							leaf.carry_by_ant(ant)
-						elif (ant.location - world.nest_location).get_length() < world.nest_r and ant.state == "carry_stuff":
+							print 3
+						elif distance_to_nest < world.nest_r and ant.state == "carry_stuff":
 							ant.drop_stuff()
-							leaf.speed = 0.
+							leaf.speed = 0
+							print 4
 			
 		world.process(time_passed)
 		world.render(screen)

@@ -22,7 +22,7 @@ class World():
 		self.spider_id = 0
 		self.spider_image = './source/spider.png'
 		"""
-		self.leaf_num = 10
+		self.leaf_num = 1
 		self.leaf_id = 0
 		self.leaf_image = 'leaf.png'
 		
