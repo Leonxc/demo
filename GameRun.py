@@ -37,17 +37,19 @@ def run():
 						if distance > ant.senseRange and (ant.state == "explore" or ant.state == "drop_stuff"):
 							ant.explore()
 							print 1
-						elif 10 < distance < ant.senseRange and (ant.state == "explore" or ant.state == "seeking") :
+						elif 10 < distance < ant.senseRange and ant.state == "explore" and leaf.state != "drop_by_ant":
 							ant.seeking(leaf)
 							print 2
-						elif distance_to_nest >world.nest_r and distance < 10 and ant.state == "seeking":
+						elif distance_to_nest > world.nest_r and distance < 10 and ant.state == "seeking":
 							ant.carry_stuff(leaf)
 							leaf.carry_by_ant(ant)
 							print 3
-						elif distance_to_nest < world.nest_r and ant.state == "carry_stuff":
+						elif distance_to_nest < world.nest_r - randint(1, world.nest_r) and ant.state == "carry_stuff":
 							ant.drop_stuff()
-							leaf.speed = 0
+							leaf.drop_by_ant()
 							print 4
+						else:
+							ant.explore()
 			
 		world.process(time_passed)
 		world.render(screen)

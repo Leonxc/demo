@@ -13,17 +13,18 @@ class Ant():
 		self.image = image
 		self.world = world
 		self.location = Vector2(location)
-		self.destination = Vector2(0, 0)
-		self.speed = 60.
+		self.destination = Vector2(randint(0, world.width), randint(0, world.high))
+		self.speed = 120
 		self.senseRange = 60
 		self.state = "explore"
 		
 	def render(self, surface):
 		x, y = self.location
-		#print x, y
 		surface.blit(self.image, (x, y))#将图片中心作为显示坐标
 		
 	def process(self, time_passed):#移动
+		while self.location == self.destination:
+			self.explore()
 		if self.location != self.destination and self.speed > 0:
 			location_to_destination = self.destination - self.location
 			distance = location_to_destination.get_length()
@@ -52,11 +53,11 @@ class Ant():
 		
 	def carry_stuff(self, leaf):
 		self.destination = self.world.nest_location
-		self.speed = 40
+		self.speed = 60
 		self.state = "carry_stuff"
 			
 	def drop_stuff(self):
-		self.speed = 60
+		self.speed = 120
 		self.state = "drop_stuff"
 		
 		
@@ -69,6 +70,7 @@ class Leaf():
 		self.location = Vector2(0, 0)
 		self.destination = Vector2(0, 0)
 		self.speed = 0
+		self.state = ""
 		
 	def create(self):
 		w, h = (self.world.width, self.world.high)
@@ -91,13 +93,18 @@ class Leaf():
 		if self.location != self.destination:
 			location_to_destination = self.destination - self.location
 			distance = location_to_destination.get_length()
-			head = location_to_destination.normalize()
-			road = min(distance, time_passed * self.speed)
-			self.location += self.location * head
-		
+			head = location_to_destination.get_normalized()
+			road = min(distance, time_passed * self.speed / 1000)
+			self.location += road * head
+
 	def carry_by_ant(self, ant):
 		self.speed = ant.speed
-		self.location = ant.location
+		self.destination = self.world.nest_location
+		self.state = "carry_by_ant"
+		
+	def drop_by_ant(self):
+		self.speed = 0
+		self.state = "drop_by_ant"
 		"""
 class Spider():
 	def __init__(self, id, image, world):

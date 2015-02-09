@@ -9,7 +9,7 @@ class World():
 	def __init__(self):
 		self.width = 640
 		self.high = 480
-		self.nest_location = (self.width/2, self.high/2)
+		self.nest_location = Vector2(self.width/2, self.high/2)
 		self.nest_r = 50
 		self.entities = []
 		self.entities_id = 0
@@ -22,13 +22,13 @@ class World():
 		self.spider_id = 0
 		self.spider_image = './source/spider.png'
 		"""
-		self.leaf_num = 1
+		self.leaf_num = 20
 		self.leaf_id = 0
 		self.leaf_image = 'leaf.png'
 		
 		self.background = pygame.surface.Surface((self.width, self.high)).convert()
 		self.background.fill((255, 255, 255))
-		pygame.draw.circle(self.background, (200, 255, 200), self.nest_location, self.nest_r)
+		pygame.draw.circle(self.background, (200, 255, 200), (self.width/2, self.high/2), self.nest_r)
 		
 	def render(self, surface):
 		surface.blit(self.background, (0, 0))
