@@ -21,21 +21,29 @@ def run():
 			if event.type == QUIT:
 				return
 			if event.type == MOUSEBUTTONDOWN:
-				x, y = event.MOUSEBUTTONDOWN[0]
-				world.create_ant()
+				x, y = event.pos
+				world.create_ant((x, y))
 				
 		time_passed = clock.tick(30)
 		if randint(1, 10) == 1:
 			world.create_leaf()
+			
 		for ant in world.entities:
 			if isinstance(ant, Ant):
-				while True:
-					if ant.explore():
-						break
-				while True:
-					if ant.seeking():
-						break
-
+				for leaf in world.entities:
+					if isinstance(leaf, Leaf):
+						distance = (ant.location - leaf.location).get_length()
+						if distance > ant.senseRange and (ant.state == "explore" or ant.state == "drop_stuff"):
+							ant.explore()
+						elif 10 < distance < ant.senseRange and (ant.state == "explore" or ant.state == "seeking") :
+							ant.seeking(leaf)
+						elif distance < 10 and ant.state == "seeking":
+							ant.carry_stuff(leaf)
+							leaf.carry_by_ant(ant)
+						elif (ant.location - world.nest_location).get_length() < world.nest_r and ant.state == "carry_stuff":
+							ant.drop_stuff()
+							leaf.speed = 0.
+			
 		world.process(time_passed)
 		world.render(screen)
 	

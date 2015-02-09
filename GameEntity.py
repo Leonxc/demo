@@ -12,23 +12,24 @@ class Ant():
 		self.id = id
 		self.image = image
 		self.world = world
-		self.location = location
+		self.location = Vector2(location)
 		self.destination = Vector2(0, 0)
 		self.speed = 60.
-		self.senseRange = 30
-		self.brain = StateMachine()
+		self.senseRange = 60
+		self.state = "explore"
 		
 	def render(self, surface):
 		x, y = self.location
-		w, h = self.image.get_size()
-		surface.blit(self.image, (x-w/2, y-h/2))#将图片中心作为显示坐标
+		#print x, y
+		surface.blit(self.image, (x, y))#将图片中心作为显示坐标
 		
 	def process(self, time_passed):#移动
-		if self.location != self.destination:
+		if self.location != self.destination and self.speed > 0:
 			location_to_destination = self.destination - self.location
 			distance = location_to_destination.get_length()
-			head = location_to_destination.normalize()
-			self.location = min(distance, time_passed * self.speed * head)
+			head = location_to_destination.get_normalized()
+			road = min(distance, time_passed * self.speed / 1000)
+			self.location += head * road
 			#TODO 图片旋转
 	"""
 	def attack_spider(self, spider):
@@ -41,33 +42,21 @@ class Ant():
 			"""
 	def explore(self):
 		w, h = (self.world.width, self.world.high)
-		if randint(1, 20) == 1:
+		if randint(1, 100) == 1:
 			self.destination = (randint(0, w), randint(0, h))
-			return True
-		else:
-			return False
+			self.state = "explore"
 			
-	def seeking(self):
-		for entity in self.world.entities:
-			if isinstance(entity, Leaf):
-				distance = (entity.location - self.location).get_length()
-				if 10 < distance and distance <= self.senseRange:
-					self.destination = entity.location
-					return True
-				elif distance < 10:
-					self.carry_stuff()
-					return False
-			
-	def carry_stuff(self):
-		self.destination = world.nest_location
-		distance = (self.location - self.destination).get_length()
-		if distance > self.world.nest_r:
-			self.speed = 40.
-		else:
-			self.drop_stuff()
+	def seeking(self, leaf):
+		self.destination = leaf.location
+		self.state = "seeking"
+	def carry_stuff(self, leaf):
+		self.destination = self.world.nest_location
+		self.speed = 40
+		self.state = "carry_stuff"
 			
 	def drop_stuff(self):
 		self.speed = 60
+		self.state = "drop_stuff"
 		
 		
 class Leaf():
@@ -82,22 +71,20 @@ class Leaf():
 		
 	def create(self):
 		w, h = (self.world.width, self.world.high)
-		x, y = (randint(0, w), randint(0, h))
+		x, y = (randint(0, w-10), randint(0, h-10))
 		ox, oy = self.world.nest_location
 		r = self.world.nest_r
 		while True:
 			if ox-r < x < ox+r and oy-r < y < oy+r:
-				x, y = (randint(0, w), randint(0, y))
+				x, y = (randint(0, w-10), randint(0, y-10))
 			else:
 				self.location = (x, y)
-				print x,y
+				self.destination = self.location
 				break
 				
 	def render(self, surface):
-		print self.location
-		x, y = self.location
-		w, h = self.image.get_size()
-		surface.blit(self.image, (x-w/2, y-h/2))
+		#print self.location
+		surface.blit(self.image, self.location)
 		
 	def process(self, time_passed):#移动
 		if self.location != self.destination:

@@ -22,39 +22,41 @@ class World():
 		self.spider_id = 0
 		self.spider_image = './source/spider.png'
 		"""
-		self.leaf_num = 50
+		self.leaf_num = 10
 		self.leaf_id = 0
 		self.leaf_image = 'leaf.png'
 		
 		self.background = pygame.surface.Surface((self.width, self.high)).convert()
 		self.background.fill((255, 255, 255))
-		pygame.draw.circle(self.background, (200, 255, 200), self.nest_location, int(self.nest_r))
+		pygame.draw.circle(self.background, (200, 255, 200), self.nest_location, self.nest_r)
 		
 	def render(self, surface):
+		surface.blit(self.background, (0, 0))
 		for entity in self.entities:
 			entity.render(surface)
 			
-	def process(self, surface):
+	def process(self, time_passed):
 		for entity in self.entities:
-			entity.process(surface)
+			entity.process(time_passed)
 		
 	def create_ant(self, mouse_down_pos):
-		if event.type == MOUSEBUTTONDOWN:
-			x, y = mouse_down_pos
-			if self.ant_num > 0 and x in xrange(0, self.width) and y in xrange(0, self.high):
-				ant = Ant(self.ant_id, pygame.image.load(self.ant_image).convert_alpha(), self, (x, y))
-				self.entities.append(ant)
-				self.entities_id += 1
-				self.ant_num -= 1
-				self.ant_id += 1
-				
+		x, y = mouse_down_pos
+		if self.ant_num > 0 and 0 < x < self.width and 0 < y < self.high:
+			ant = Ant(self.ant_id, pygame.image.load(self.ant_image).convert_alpha(), self, (x, y))
+			self.entities.append(ant)
+			self.entities_id += 1
+			self.ant_num -= 1
+			self.ant_id += 1
+			
 	def create_leaf(self):
-		leaf = Leaf(self.leaf_id, pygame.image.load(self.leaf_image).convert_alpha(), self)
-		leaf.create()
-		self.entities.append(leaf)
-		self.entities_id += 1
-		self.leaf_num -= 1
-		self.leaf_id += 1
+		if self.leaf_num > 0:
+			leaf = Leaf(self.leaf_id, pygame.image.load(self.leaf_image).convert_alpha(), self)
+			leaf.create()
+			self.entities.append(leaf)
+			self.entities_id += 1
+			self.leaf_num -= 1
+			self.leaf_id += 1
+			
 """
 	def create_spider(self):
 		if self.spider_num < 0:
