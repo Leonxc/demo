@@ -7,6 +7,7 @@ from sys import exit
 from pygame.locals import *
 from GameEntity import *
 from World import *
+from StateMachine import *
 from gameobjects.vector2 import Vector2
 
 def run():
@@ -14,6 +15,7 @@ def run():
 	screen = pygame.display.set_mode((640, 480), 0, 32)
 	world = World()
 	clock = pygame.time.Clock()
+	stateMachine = StateMachine(world)
 	x, y = (0, 0)
 	#pygame.display.update()
 	while True:
@@ -28,28 +30,8 @@ def run():
 		if randint(1, 10) == 1:
 			world.create_leaf()
 			
-		for ant in world.entities:
-			if isinstance(ant, Ant):
-				for leaf in world.entities:
-					if isinstance(leaf, Leaf):
-						distance = (ant.location - leaf.location).get_length()
-						distance_to_nest = (ant.location - world.nest_location).get_length()
-						if distance > ant.senseRange and (ant.state == "explore" or ant.state == "drop_stuff"):
-							ant.explore()
-							print 1
-						elif 10 < distance < ant.senseRange and ant.state == "explore" and leaf.state != "drop_by_ant":
-							ant.seeking(leaf)
-							print 2
-						elif distance_to_nest > world.nest_r and distance < 10 and ant.state == "seeking":
-							ant.carry_stuff(leaf)
-							leaf.carry_by_ant(ant)
-							print 3
-						elif distance_to_nest < world.nest_r - randint(1, world.nest_r) and ant.state == "carry_stuff":
-							ant.drop_stuff()
-							leaf.drop_by_ant()
-							print 4
-						else:
-							ant.explore()
+		stateMachine.analyze_entities()
+		stateMachine.select_state()
 			
 		world.process(time_passed)
 		world.render(screen)

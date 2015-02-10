@@ -51,8 +51,8 @@ class Ant():
 		self.destination = leaf.location
 		self.state = "seeking"
 		
-	def carry_stuff(self, leaf):
-		self.destination = self.world.nest_location
+	def carry_stuff(self):
+		self.destination = self.world.nest_location + (randint(-20, 20), randint(-20, 20))
 		self.speed = 60
 		self.state = "carry_stuff"
 			
@@ -99,7 +99,7 @@ class Leaf():
 
 	def carry_by_ant(self, ant):
 		self.speed = ant.speed
-		self.destination = self.world.nest_location
+		self.destination = ant.location
 		self.state = "carry_by_ant"
 		
 	def drop_by_ant(self):
