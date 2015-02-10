@@ -43,7 +43,7 @@ class Ant():
 			"""
 	def explore(self):
 		w, h = (self.world.width, self.world.high)
-		if randint(1, 100) == 1:
+		if randint(1, 300) == 1:
 			self.destination = (randint(0, w), randint(0, h))
 			self.state = "explore"
 			
@@ -71,6 +71,7 @@ class Leaf():
 		self.destination = Vector2(0, 0)
 		self.speed = 0
 		self.state = ""
+		self.target = None
 		
 	def create(self):
 		w, h = (self.world.width, self.world.high)
@@ -81,7 +82,7 @@ class Leaf():
 			if ox-r < x < ox+r and oy-r < y < oy+r:
 				x, y = (randint(0, w-10), randint(0, y-10))
 			else:
-				self.location = (x, y)
+				self.location = Vector2(x, y)
 				self.destination = self.location
 				break
 				
@@ -97,14 +98,14 @@ class Leaf():
 			road = min(distance, time_passed * self.speed / 1000)
 			self.location += road * head
 
-	def carry_by_ant(self, ant):
-		self.speed = ant.speed
-		self.destination = ant.location
-		self.state = "carry_by_ant"
+	def carry_by_ant(self):
+		if self.target != None:
+			self.speed = self.target.speed
+			self.destination = self.target.location
 		
 	def drop_by_ant(self):
 		self.speed = 0
-		self.state = "drop_by_ant"
+		self.target = None
 		"""
 class Spider():
 	def __init__(self, id, image, world):

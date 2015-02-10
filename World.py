@@ -42,7 +42,7 @@ class World():
 	def create_ant(self, mouse_down_pos):
 		x, y = mouse_down_pos
 		if self.ant_num > 0 and 0 < x < self.width and 0 < y < self.high:
-			ant = Ant(self.ant_id, pygame.image.load(self.ant_image).convert_alpha(), self, (x, y))
+			ant = Ant(self.ant_id, pygame.image.load(self.ant_image).convert_alpha(), self, Vector2(x, y))
 			self.entities.append(ant)
 			self.entities_id += 1
 			self.ant_num -= 1

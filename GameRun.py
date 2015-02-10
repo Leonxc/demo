@@ -9,6 +9,7 @@ from GameEntity import *
 from World import *
 from StateMachine import *
 from gameobjects.vector2 import Vector2
+# import thread
 
 def run():
 	pygame.init()
@@ -31,7 +32,8 @@ def run():
 			world.create_leaf()
 			
 		stateMachine.analyze_entities()
-		stateMachine.select_state()
+		stateMachine.ant_state()
+		stateMachine.leaf_state()
 			
 		world.process(time_passed)
 		world.render(screen)
