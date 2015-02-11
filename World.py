@@ -17,11 +17,11 @@ class World():
 		self.ant_num = 20
 		self.ant_id = 0
 		self.ant_image = 'ant.png'
-		"""
-		self.spider_num = 5
+		
+		self.spider_num = 1
 		self.spider_id = 0
-		self.spider_image = './source/spider.png'
-		"""
+		self.spider_image = 'spider.png'
+		
 		self.leaf_num = 20
 		self.leaf_id = 0
 		self.leaf_image = 'leaf.png'
@@ -57,23 +57,13 @@ class World():
 			self.leaf_num -= 1
 			self.leaf_id += 1
 			
-"""
+
 	def create_spider(self):
 		if self.spider_num < 0:
 			return
-		w, h = (self.width, self.high)
-		if randint(0, 100) == 1:
-			self.location = (0, randint(0, h))
-		elif randint(0, 100) == 2:
-			self.location = (w, randint(0, h))
-		elif randint(0, 100) == 3:
-			self.location = (randint(0, w), 0)
-		elif randint(0, 100) == 4:
-			self.location = (randint(0, w), h)
-		else:
-			return
-		spider = Spider(self.spider_id, self.spider_image, self)
-		self.entities[entities_id] = spider
+		spider = Spider(self.spider_id, pygame.image.load(self.spider_image), self)
+		spider.create()
+		self.entities.append(spider)
 		self.entities_id += 1
 		self.spider_id += 1
 		self.spider_num -= 1
@@ -90,4 +80,4 @@ class World():
 	def del_spider(self):
 		#TODO
 		pass
-		"""
+		

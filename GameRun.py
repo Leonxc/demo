@@ -18,6 +18,7 @@ def run():
 	clock = pygame.time.Clock()
 	stateMachine = StateMachine(world)
 	x, y = (0, 0)
+	time = 0
 	#pygame.display.update()
 	while True:
 		for event in pygame.event.get():
@@ -31,6 +32,12 @@ def run():
 		if randint(1, 10) == 1:
 			world.create_leaf()
 			
+		if time == 50:
+			world.create_spider()
+			time = 0
+		else:
+			time += 1
+		print time 
 		stateMachine.analyze_entities()
 		stateMachine.ant_state()
 		stateMachine.leaf_state()

@@ -20,7 +20,7 @@ class Ant():
 		
 	def render(self, surface):
 		x, y = self.location
-		surface.blit(self.image, (x, y))#将图片中心作为显示坐标
+		surface.blit(self.image, (x, y))
 		
 	def process(self, time_passed):#移动
 		while self.location == self.destination:
@@ -52,13 +52,17 @@ class Ant():
 		self.state = "seeking"
 		
 	def carry_stuff(self):
-		self.destination = self.world.nest_location + (randint(-20, 20), randint(-20, 20))
+		self.destination = self.world.nest_location + (randint(-20, 20), randint(-20, 20)) - Vector2(self.image.get_size())/2
 		self.speed = 60
 		self.state = "carry_stuff"
 			
 	def drop_stuff(self):
 		self.speed = 120
 		self.state = "drop_stuff"
+		
+	def dead():
+		self.state = "dead"
+		self.destination = self.location
 		
 		
 class Leaf():
@@ -106,7 +110,8 @@ class Leaf():
 	def drop_by_ant(self):
 		self.speed = 0
 		self.target = None
-		"""
+		self.destination = self.location
+		
 class Spider():
 	def __init__(self, id, image, world):
 		self.name = "spider"
@@ -114,40 +119,61 @@ class Spider():
 		self.image = image
 		self.world = world
 		self.health = 25
-		self.speed = 40
-		#self.brain
+		self.speed = 80
+		self.state = "explore"
 		self.location = Vector2(0, 0)
-		self.destination = world.nest_location
+		self.destination = Vector2(0, 0)
+		self.target = None
 		
 	def render(self, surface):
-		x, y = self.location
-		w, h = self.image.get_size()
-		surface.blit(self.image, (x-w/2, y-h/2))
+		surface.blit(self.image, self.location)
 		
 	def process(self, time_passed):#移动
 		if self.location != self.destination:
 			location_to_destination = self.destination - self.location
 			distance = location_to_destination.get_length()
-			head = location_to_destination.normalize()
-			self.location = min(distance, time_passed * self.speed * head)
+			head = location_to_destination.get_normalize()
+			road = min(distance, time_passed * self.speed / 1000)
+			self.location += road * head
 	
 	def create(self):
-		if self.world.spider_num < 0:
-			return
 		w, h = (self.world.width, self.world.high)
 		if randint(0, 100) == 1:
-			self.location = (0, randint(0, h))
+			self.location = Vector2(0, randint(0, h))
 		elif randint(0, 100) == 2:
-			self.location = (w, randint(0, h))
+			self.location = Vector2(w, randint(0, h))
 		elif randint(0, 100) == 3:
-			self.location = (randint(0, w), 0)
+			self.location = Vector2(randint(0, w), 0)
 		elif randint(0, 100) == 4:
-			self.location = (randint(0, w), h)
+			self.location = Vector2(randint(0, w), h)
+		else:
+			return
 			
+	def explore(self):
+		w, h = (self.world.width, self.world.high)
+		if randint(1, 300) == 1:
+			self.destination = (randint(0, w), randint(0, h))
+			self.state = "explore"
+			
+	def seeking(self, ant):
+		self.destination = ant.location
+		self.state = "seeking"
+		self.target = ant
+		
+	def eat_ant(self, ant):
+		ant.dead()
+		
 	def dead(self):
-		self.speed = 0
-		#TODO 图片旋转
+		# self.speed = 0
+		self.destination = self.location
+		self.state = "dead"
 		
 	def carry_by_ant(self, ant):
-		self.location = ant.location
-		"""
+		self.speed = ant.speed
+		self.destination = ant.location
+		self.state = "carry_by_ant"
+		
+	def drop_by_ant(self):
+		self.speed = 0
+		self.target = None
+		self.destination = self.location
