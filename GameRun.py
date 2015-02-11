@@ -38,9 +38,11 @@ def run():
 		else:
 			time += 1
 		print time 
+		
 		stateMachine.analyze_entities()
 		stateMachine.ant_state()
 		stateMachine.leaf_state()
+		stateMachine.spider_state()
 			
 		world.process(time_passed)
 		world.render(screen)

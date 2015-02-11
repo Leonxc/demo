@@ -49,20 +49,43 @@ class World():
 			self.ant_id += 1
 			
 	def create_leaf(self):
-		if self.leaf_num > 0:
-			leaf = Leaf(self.leaf_id, pygame.image.load(self.leaf_image).convert_alpha(), self)
-			leaf.create()
-			self.entities.append(leaf)
-			self.entities_id += 1
-			self.leaf_num -= 1
-			self.leaf_id += 1
+		if self.leaf_num <= 0:
+			return
+		w, h = (self.width, self.high)
+		x, y = (randint(0, w-10), randint(0, h-10))
+		ox, oy = self.nest_location
+		r = self.nest_r
+		while True:
+			if ox-r < x < ox+r and oy-r < y < oy+r:
+				x, y = (randint(0, w-10), randint(0, y-10))
+			else:
+				break
+		leaf = Leaf(self.leaf_id, pygame.image.load(self.leaf_image).convert_alpha(), self)
+		leaf.location = Vector2(x, y)
+		leaf.destination = leaf.location
+		self.entities.append(leaf)
+		self.entities_id += 1
+		self.leaf_num -= 1
+		self.leaf_id += 1
 			
 
 	def create_spider(self):
-		if self.spider_num < 0:
+		if self.spider_num <= 0:
+			return
+		w, h = (self.width, self.high)
+		if randint(0, 4) == 1:
+			spider_location = Vector2(0, randint(0, h-20))
+		elif randint(0, 4) == 2:
+			spider_location = Vector2(w-20, randint(0, h-20))
+		elif randint(0, 4) == 3:
+			spider_location = Vector2(randint(0, w-20), 0)
+		elif randint(0, 4) == 4:
+			spider_location = Vector2(randint(0, w-20), h-20)
+		else:
 			return
 		spider = Spider(self.spider_id, pygame.image.load(self.spider_image), self)
-		spider.create()
+		spider.location = spider_location
+		spider.destination = Vector2(randint(0, w-20), randint(0, h-20))
 		self.entities.append(spider)
 		self.entities_id += 1
 		self.spider_id += 1

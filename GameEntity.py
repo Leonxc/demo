@@ -32,15 +32,14 @@ class Ant():
 			road = min(distance, time_passed * self.speed / 1000)
 			self.location += head * road
 			#TODO 图片旋转
-	"""
+	
 	def attack_spider(self, spider):
 		self.destination = spider.location - randint(-10, 10)
 		distance = (self.location - self.destination).get_length()
 		if distance < 10:
-			self.speed = 60
-		else:
-			self.speed = 100
-			"""
+			self.speed = spider.speed
+			spider.health -= 1
+			
 	def explore(self):
 		w, h = (self.world.width, self.world.high)
 		if randint(1, 300) == 1:
@@ -124,30 +123,33 @@ class Spider():
 		self.location = Vector2(0, 0)
 		self.destination = Vector2(0, 0)
 		self.target = None
+		self.senseRange = 30
 		
 	def render(self, surface):
 		surface.blit(self.image, self.location)
 		
 	def process(self, time_passed):#移动
+		while self.location == self.destination:
+			self.explore()
 		if self.location != self.destination:
 			location_to_destination = self.destination - self.location
 			distance = location_to_destination.get_length()
-			head = location_to_destination.get_normalize()
+			head = location_to_destination.get_normalized()
 			road = min(distance, time_passed * self.speed / 1000)
 			self.location += road * head
 	
-	def create(self):
-		w, h = (self.world.width, self.world.high)
-		if randint(0, 100) == 1:
-			self.location = Vector2(0, randint(0, h))
-		elif randint(0, 100) == 2:
-			self.location = Vector2(w, randint(0, h))
-		elif randint(0, 100) == 3:
-			self.location = Vector2(randint(0, w), 0)
-		elif randint(0, 100) == 4:
-			self.location = Vector2(randint(0, w), h)
-		else:
-			return
+	# def create(self):
+		# w, h = (self.world.width, self.world.high)
+		# if randint(0, 100) == 1:
+			# self.location = Vector2(0, randint(0, h))
+		# elif randint(0, 100) == 2:
+			# self.location = Vector2(w, randint(0, h))
+		# elif randint(0, 100) == 3:
+			# self.location = Vector2(randint(0, w), 0)
+		# elif randint(0, 100) == 4:
+			# self.location = Vector2(randint(0, w), h)
+		# else:
+			# return
 			
 	def explore(self):
 		w, h = (self.world.width, self.world.high)

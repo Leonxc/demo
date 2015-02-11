@@ -45,6 +45,8 @@ class StateMachine(object):
 					leaf.state = "drop_by_ant"
 					leaf.drop_by_ant()
 					print 444
+				elif ant.state == "dead":
+					ant.drop_stuff()
 					
 	def leaf_state(self):
 		for leaf in self.leafs:
@@ -59,4 +61,14 @@ class StateMachine(object):
 				distance_to_nest = (spider.location - self.world.nest_location).get_length()
 				if spider.state == "explore":
 					spider.explore()
+				elif 10 < distance < spider.senseRange and spider.state == "explore":
+					spider.seeking(ant)
+				elif distance < 10 and spider.state == "seeking" and self.target == ant:
+					spider.eat_ant(ant)
+					spider.state = "explore"
+				if distance_to_nest < self.world.nest_r and ant.state == "explore":
+					ant.attack_spider(spider)
+					if spider.health <= 0:
+						spider.dead()
+				
 				# elif 
