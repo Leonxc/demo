@@ -34,7 +34,7 @@ class Ant():
 			#TODO 图片旋转
 	
 	def attack_spider(self, spider):
-		self.destination = spider.location - randint(-10, 10)
+		self.destination = spider.location - (randint(-10, 10),randint(-10, 10))
 		distance = (self.location - self.destination).get_length()
 		if distance < 10:
 			self.speed = spider.speed
@@ -59,7 +59,7 @@ class Ant():
 		self.speed = 120
 		self.state = "drop_stuff"
 		
-	def dead():
+	def dead(self):
 		self.state = "dead"
 		self.destination = self.location
 		
@@ -71,7 +71,7 @@ class Leaf():
 		self.image = image
 		self.world = world
 		self.location = Vector2(0, 0)
-		self.destination = Vector2(0, 0)
+		self.destination = self.location
 		self.speed = 0
 		self.state = ""
 		self.target = None
@@ -121,9 +121,9 @@ class Spider():
 		self.speed = 80
 		self.state = "explore"
 		self.location = Vector2(0, 0)
-		self.destination = Vector2(0, 0)
+		self.destination = Vector2(randint(0, world.width-20), randint(0, world.high-20))
 		self.target = None
-		self.senseRange = 30
+		self.senseRange = 120
 		
 	def render(self, surface):
 		surface.blit(self.image, self.location)

@@ -62,7 +62,7 @@ class World():
 				break
 		leaf = Leaf(self.leaf_id, pygame.image.load(self.leaf_image).convert_alpha(), self)
 		leaf.location = Vector2(x, y)
-		leaf.destination = leaf.location
+		# leaf.destination = leaf.location
 		self.entities.append(leaf)
 		self.entities_id += 1
 		self.leaf_num -= 1
@@ -85,7 +85,7 @@ class World():
 			return
 		spider = Spider(self.spider_id, pygame.image.load(self.spider_image), self)
 		spider.location = spider_location
-		spider.destination = Vector2(randint(0, w-20), randint(0, h-20))
+		# spider.destination = Vector2(randint(0, w-20), randint(0, h-20))
 		self.entities.append(spider)
 		self.entities_id += 1
 		self.spider_id += 1

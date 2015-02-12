@@ -26,7 +26,11 @@ class StateMachine(object):
 		
 	def ant_state(self):
 		for ant in self.ants:
+			if ant.state == "dead":
+				continue
 			for leaf in self.leafs:
+				if leaf.state == "drop_by_ant":
+					continue
 				distance = (ant.location - leaf.location).get_length()
 				distance_to_nest = (ant.location - self.world.nest_location).get_length()
 				if distance > ant.senseRange and (ant.state == "explore" or ant.state == "drop_stuff"):
@@ -57,13 +61,15 @@ class StateMachine(object):
 	def spider_state(self):
 		for spider in self.spiders:
 			for ant in self.ants:
+				if ant.state == "dead":
+					continue
 				distance = (ant.location - spider.location).get_length()
 				distance_to_nest = (spider.location - self.world.nest_location).get_length()
-				if spider.state == "explore":
+				if spider.state == "explore" and distance > spider.senseRange:
 					spider.explore()
 				elif 10 < distance < spider.senseRange and spider.state == "explore":
 					spider.seeking(ant)
-				elif distance < 10 and spider.state == "seeking" and self.target == ant:
+				elif distance < 10 and spider.state == "seeking" and spider.target == ant:
 					spider.eat_ant(ant)
 					spider.state = "explore"
 				if distance_to_nest < self.world.nest_r and ant.state == "explore":
